@@ -26,8 +26,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String ALLOW_KEY = "ALLOWED";
     public static final String CAMERA_PREF = "camera_pref";
     private boolean flashLightStatus = false;
-    final boolean hasCameraFlash = getPackageManager().
-            hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+//    final boolean hasCameraFlash = getPackageManager().
+//            hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -200,28 +200,28 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openCamera() {
-        Intent intent = new Intent("android.media.action.VIDEO_CAPTURE");
+        Intent intent = new Intent(this, CameraPreview.class);
         startActivity(intent);
     }
 
     private void setTorch(){
-        if (hasCameraFlash){
-            CameraManager cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
-            if (flashLightStatus) {
-                try {
-                    String cameraId = cameraManager.getCameraIdList()[0];
-                    cameraManager.setTorchMode(cameraId, false);
-                    flashLightStatus = false;
-                } catch (CameraAccessException e) {
-                }
-            } else {
-                try {
-                    String cameraId = cameraManager.getCameraIdList()[0];
-                    cameraManager.setTorchMode(cameraId, true);
-                    flashLightStatus = true;
-                } catch (CameraAccessException e) {
-                }
-            }
-        }
+//        if (hasCameraFlash){
+//            CameraManager cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
+//            if (flashLightStatus) {
+//                try {
+//                    String cameraId = cameraManager.getCameraIdList()[0];
+//                    cameraManager.setTorchMode(cameraId, false);
+//                    flashLightStatus = false;
+//                } catch (CameraAccessException e) {
+//                }
+//            } else {
+//                try {
+//                    String cameraId = cameraManager.getCameraIdList()[0];
+//                    cameraManager.setTorchMode(cameraId, true);
+//                    flashLightStatus = true;
+//                } catch (CameraAccessException e) {
+//                }
+//            }
+//        }
     }
 }
