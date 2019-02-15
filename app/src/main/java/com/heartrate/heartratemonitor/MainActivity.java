@@ -26,8 +26,8 @@ public class MainActivity extends AppCompatActivity {
     public static final String ALLOW_KEY = "ALLOWED";
     public static final String CAMERA_PREF = "camera_pref";
     private boolean flashLightStatus = false;
-    final boolean hasCameraFlash = getPackageManager().
-            hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+    //final boolean hasCameraFlash = getPackageManager().
+    //        hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -53,7 +53,8 @@ public class MainActivity extends AppCompatActivity {
                             MY_PERMISSIONS_REQUEST_CAMERA);
                 }
             }
-        } else {
+        }
+        else {
             Button button_camera = (Button) findViewById(R.id.button_camera);
             button_camera.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -79,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
         prefsEditor.commit();
     }
 
-    private boolean checkCameraHardware(Context context){
+    /*private boolean checkCameraHardware(Context context){
         if (context.getPackageManager().hasSystemFeature(PackageManager.FEATURE_CAMERA)){
             // this device has a camera
             return true;
@@ -87,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
             // no camera on this device
             return false;
         }
-    }
+    }*/
     public static Boolean getFromPref(Context context, String key) {
         SharedPreferences myPrefs = context.getSharedPreferences(CAMERA_PREF,
                 Context.MODE_PRIVATE);
@@ -200,12 +201,13 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openCamera() {
-        Intent intent = new Intent("android.media.action.VIDEO_CAPTURE");
+        //Intent intent = new Intent("android.media.action.VIDEO_CAPTURE");
+        Intent intent = new Intent(MainActivity.this, CameraPreview.class);
         startActivity(intent);
     }
 
     private void setTorch(){
-        if (hasCameraFlash){
+        //if (hasCameraFlash){
             CameraManager cameraManager = (CameraManager) getSystemService(CAMERA_SERVICE);
             if (flashLightStatus) {
                 try {
@@ -222,6 +224,6 @@ public class MainActivity extends AppCompatActivity {
                 } catch (CameraAccessException e) {
                 }
             }
-        }
+        //}
     }
 }

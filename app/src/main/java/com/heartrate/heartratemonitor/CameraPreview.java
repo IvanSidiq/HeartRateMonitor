@@ -16,7 +16,7 @@ import android.view.WindowManager;
 import java.io.IOException;
 
 
-public class CameraPreview extends Activity implements SurfaceHolder.Callback {
+public class CameraPreview extends Activity implements SurfaceHolder.Callback, View.OnClickListener {
     private SurfaceHolder holder;
     private Camera mCamera;
     private MediaRecorder recorder;
@@ -68,6 +68,7 @@ public class CameraPreview extends Activity implements SurfaceHolder.Callback {
     }
 
     private boolean recording=false;
+    @Override
     public void onClick(View v) {
         if (recording) {
             recorder.stop();
