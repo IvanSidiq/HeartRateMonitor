@@ -58,8 +58,8 @@ public class CameraPreview extends Activity {
     private Context context;
     private int addX = -1;
     double addY;
-    int[] xv = new int[300];
-    int[] yv = new int[300];
+    int[] xv = new int[3000];
+    int[] yv = new int[3000];
     int[] hua=new int[]{9,10,11,12,13,14,13,12,11,10,9,8,7,6,7,8,9,10,11,10,10};
 
     private static final AtomicBoolean processing = new AtomicBoolean(false);
@@ -138,7 +138,7 @@ public class CameraPreview extends Activity {
         renderer = buildRenderer(color, style, true);
 
         //设置好图表的样式
-        setChartSettings(renderer, "X", "Y", 0, 300, 4, 16, Color.WHITE, Color.WHITE);
+        setChartSettings(renderer, "X", "Y", 0, 3000, 4, 16, Color.WHITE, Color.WHITE);
 
         //生成图表
         chart = ChartFactory.getLineChartView(context, mDataset, renderer);
@@ -186,7 +186,7 @@ public class CameraPreview extends Activity {
         //当结束程序时关掉Timer
         timer.cancel();
         super.onDestroy();
-    };
+    }
 
     /**
      * 创建图表
@@ -194,7 +194,7 @@ public class CameraPreview extends Activity {
     protected XYMultipleSeriesRenderer buildRenderer(int color, PointStyle style, boolean fill) {
         XYMultipleSeriesRenderer renderer = new XYMultipleSeriesRenderer();
 
-        //设置图表中曲线本身的样式，包括颜色、点的大小以及线的粗细等
+        //Atur gaya kurva itu sendiri dalam bagan, termasuk warna, ukuran titik, dan ketebalan garis.
         XYSeriesRenderer r = new XYSeriesRenderer();
         r.setColor(Color.RED);
         r.setLineWidth(1);
@@ -216,7 +216,7 @@ public class CameraPreview extends Activity {
      */
     protected void setChartSettings(XYMultipleSeriesRenderer renderer, String xTitle, String yTitle,
                                     double xMin, double xMax, double yMin, double yMax, int axesColor, int labelsColor) {
-        //有关对图表的渲染可参看api文档
+        //Untuk render bagan, lihat dokumentasi api.
         renderer.setChartTitle(title);
         renderer.setXTitle(xTitle);
         renderer.setYTitle(yTitle);
@@ -238,10 +238,10 @@ public class CameraPreview extends Activity {
     }
 
     /**
-     * 更新图标信息
+     * Perbarui informasi ikon
      */
     private void updateChart() {
-        //设置好下一个需要增加的节点
+        //Atur simpul berikutnya yang akan ditambahkan
         if(flag == 1) {
             addY = 10;
         }
@@ -265,38 +265,38 @@ public class CameraPreview extends Activity {
             j++;
         }
 
-        //移除数据集中旧的点集
+        //Hapus set poin lama dari dataset
         mDataset.removeSeries(series);
 
-        //判断当前点集中到底有多少点，因为屏幕总共只能容纳100个，所以当点数超过100时，长度永远是100
+        //Tentukan berapa banyak poin dalam set titik saat ini, karena layar hanya dapat menampung 100 total, jadi ketika jumlah poin melebihi 100, panjangnya selalu 100.
         int length = series.getItemCount();
         int bz = 0;
         //addX = length;
-        if (length > 300) {
-            length = 300;
+        if (length > 3000) {
+            length = 3000;
             bz=1;
         }
         addX = length;
-        //将旧的点集中x和y的数值取出来放入backup中，并且将x的值加1，造成曲线向右平移的效果
+        //Ambil nilai-nilai dari titik lama atur x dan y ke dalam cadangan, dan tambah nilai x dengan 1, menyebabkan kurva bergerak ke kanan.
         for (int i = 0; i < length; i++) {
             xv[i] = (int) series.getX(i) - bz;
             yv[i] = (int) series.getY(i);
         }
 
-        //点集先清空，为了做成新的点集而准备
+        //Set point dihapus terlebih dahulu, siap untuk membuat set point baru
         series.clear();
         mDataset.addSeries(series);
-        //将新产生的点首先加入到点集中，然后在循环体中将坐标变换后的一系列点都重新加入到点集中
-        //这里可以试验一下把顺序颠倒过来是什么效果，即先运行循环体，再添加新产生的点
+        // Tambahkan poin yang baru dihasilkan ke set poin pertama, lalu tambahkan kembali serangkaian poin setelah transformasi koordinat ke titik yang ditetapkan dalam loop body
+        // Di sini Anda dapat menguji efek membalik urutan, yaitu, pertama jalankan loop body, lalu tambahkan titik yang baru dibuat
         series.add(addX, addY);
         for (int k = 0; k < length; k++) {
             series.add(xv[k], yv[k]);
         }
-        //在数据集中添加新的点集
+        //Tambahkan set poin baru di dataset
         //mDataset.addSeries(series);
 
-        //视图更新，没有这一步，曲线不会呈现动态
-        //如果在非UI主线程中，需要调用postInvalidate()，具体参考api
+        //Lihat pembaruan, tanpa langkah ini, kurva tidak akan membuat dinamis
+        //Jika di utas utama non-UI, Anda perlu memanggil postInvalidate (), api referensi khusus
         chart.invalidate();
     } //曲线
 
@@ -345,7 +345,7 @@ public class CameraPreview extends Activity {
             int width = size.width;
             int height = size.height;
 
-            //图像处理
+            //Image Processing
             int imgAvg = ImageProcessing.decodeYUV420SPtoRedAvg(data.clone(),height,width);
             gx = imgAvg;
             mTV_Avg_Pixel_Values.setText("The average pixel value is" + String.valueOf(imgAvg));
@@ -354,7 +354,7 @@ public class CameraPreview extends Activity {
                 processing.set(false);
                 return;
             }
-            //计算平均值
+            //Hitung rata-rata
             int averageArrayAvg = 0;
             int averageArrayCnt = 0;
             for (int i = 0; i < averageArray.length; i++) {
@@ -364,7 +364,7 @@ public class CameraPreview extends Activity {
                 }
             }
 
-            //计算平均值
+            //Hitung rata-rata
             int rollingAverage = (averageArrayCnt > 0)?(averageArrayAvg/averageArrayCnt):0;
             TYPE newType = currentType;
             if (imgAvg < rollingAverage) {
@@ -388,7 +388,7 @@ public class CameraPreview extends Activity {
                 currentType = newType;
             }
 
-            //获取系统结束时间（ms）
+            //Dapatkan waktu akhir sistem (ms)
             long endTime = System.currentTimeMillis();
             double totalTimeInSecs = (endTime - startTime) / 1000d;
             if (totalTimeInSecs >= 2) {
