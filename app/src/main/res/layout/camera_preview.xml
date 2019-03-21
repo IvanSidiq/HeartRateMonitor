@@ -8,17 +8,16 @@
         android:id="@+id/id_preview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="1"
         android:layout_marginLeft="50dp"
-        android:layout_marginRight="50dp" />
+        android:layout_marginRight="50dp"
+        android:layout_weight="1" />
 
     <LinearLayout
         android:id="@+id/id_linearLayout_graph"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="1"
-        android:orientation="vertical" >
-    </LinearLayout>
+        android:orientation="vertical"></LinearLayout>
 
     <TextView
         android:id="@+id/id_tv_heart_rate"

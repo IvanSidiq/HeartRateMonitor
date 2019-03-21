@@ -58,8 +58,8 @@ public class CameraPreview extends Activity {
     private Context context;
     private int addX = -1;
     double addY;
-    int[] xv = new int[3000];
-    int[] yv = new int[3000];
+    int[] xv = new int[300000];
+    int[] yv = new int[300000];
     int[] hua=new int[]{9,10,11,12,13,14,13,12,11,10,9,8,7,6,7,8,9,10,11,10,10};
 
     private static final AtomicBoolean processing = new AtomicBoolean(false);
@@ -75,7 +75,7 @@ public class CameraPreview extends Activity {
     private static TextView mTV_pulse = null;
     private static PowerManager.WakeLock wakeLock = null;
     private static int averageIndex = 0;
-    private static final int averageArraySize = 4;
+    private static final int averageArraySize = 11;
     private static final int[] averageArray = new int[averageArraySize];
 
     /**
@@ -94,7 +94,7 @@ public class CameraPreview extends Activity {
     //Heartbeat subscript value
     private static int beatsIndex = 0;
     //Heartbeat array size
-    private static final int beatsArraySize = 3;
+    private static final int beatsArraySize = 10;
     //心跳数组
     private static final int[] beatsArray = new int[beatsArraySize];
     //心跳脉冲
@@ -138,7 +138,7 @@ public class CameraPreview extends Activity {
         renderer = buildRenderer(color, style, true);
 
         //设置好图表的样式
-        setChartSettings(renderer, "X", "Y", 0, 3000, 4, 16, Color.WHITE, Color.WHITE);
+        setChartSettings(renderer, "X", "Y", 0, 3000, 0,32, Color.WHITE, Color.WHITE);
 
         //生成图表
         chart = ChartFactory.getLineChartView(context, mDataset, renderer);
@@ -273,13 +273,14 @@ public class CameraPreview extends Activity {
         int bz = 0;
         //addX = length;
         if (length > 3000) {
-            length = 3000;
-            bz=1;
+            //wakeLock.release();
+            //length = 3000;
+            //bz=1;
         }
         addX = length;
         //Ambil nilai-nilai dari titik lama atur x dan y ke dalam cadangan, dan tambah nilai x dengan 1, menyebabkan kurva bergerak ke kanan.
         for (int i = 0; i < length; i++) {
-            xv[i] = (int) series.getX(i) - bz;
+            xv[i] = (int) series.getX(i);// - bz;
             yv[i] = (int) series.getY(i);
         }
 
@@ -349,7 +350,7 @@ public class CameraPreview extends Activity {
             int imgAvg = ImageProcessing.decodeYUV420SPtoRedAvg(data.clone(),height,width);
             gx = imgAvg;
             mTV_Avg_Pixel_Values.setText("The average pixel value is" + String.valueOf(imgAvg));
-
+            Log.d("ImgAvg ", String.valueOf(imgAvg));
             if (imgAvg == 0 || imgAvg == 255) {
                 processing.set(false);
                 return;
@@ -418,7 +419,7 @@ public class CameraPreview extends Activity {
                     }
                 }
                 int beatsAvg = (beatsArrayAvg / beatsArrayCnt);
-                mTV_Heart_Rate.setText("Your heart rate is"+String.valueOf(beatsAvg) +
+                mTV_Heart_Rate.setText("Heart Rate"+String.valueOf(beatsAvg) +
                         "  value:" + String.valueOf(beatsArray.length) +
                         "    " + String.valueOf(beatsIndex) +
                         "    " + String.valueOf(beatsArrayAvg) +

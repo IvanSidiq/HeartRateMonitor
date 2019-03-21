@@ -18,11 +18,21 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <Button
-        android:id="@+id/button_torch"
+        android:id="@+id/TMT"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Torch check"
-        app:layout_constraintBottom_toBottomOf="@id/button_camera"
-        app:layout_constraintStart_toEndOf="@id/button_camera"/>
+        android:layout_height="48dp"
+        android:layout_marginStart="161dp"
+        android:text="TMT random"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/button_camera" />
+
+    <Button
+        android:id="@+id/TMT2"
+        android:layout_width="wrap_content"
+        android:layout_height="48dp"
+        android:layout_marginStart="161dp"
+        android:text="TMT"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TMT" />
 
 </android.support.constraint.ConstraintLayout>

@@ -22,6 +22,9 @@
             </intent-filter>
         </activity>
         <activity android:name=".CameraPreview"></activity>
+        <activity android:name=".TMT"></activity>
+        <activity android:name=".TMT2"></activity>
+        <activity android:name=".TMT3"></activity>
     </application>
 
 </manifest>

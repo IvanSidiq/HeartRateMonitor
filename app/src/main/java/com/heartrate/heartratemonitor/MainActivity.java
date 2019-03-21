@@ -7,8 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.hardware.camera2.CameraAccessException;
-import android.hardware.camera2.CameraManager;
 import android.net.Uri;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
@@ -28,6 +26,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean flashLightStatus = false;
 //    final boolean hasCameraFlash = getPackageManager().
 //            hasSystemFeature(PackageManager.FEATURE_CAMERA_FLASH);
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -62,11 +61,19 @@ public class MainActivity extends AppCompatActivity {
                 }
             });
 
-            Button button_torch = (Button) findViewById(R.id.button_torch);
+            Button button_torch = (Button) findViewById(R.id.TMT);
             button_torch.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-                    setTorch();
+                    tMT();
+                }
+            });
+
+            Button button_tmt = (Button) findViewById(R.id.TMT2);
+            button_tmt.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    tMT2();
                 }
             });
         }
@@ -201,6 +208,16 @@ public class MainActivity extends AppCompatActivity {
 
     private void openCamera() {
         Intent intent = new Intent(this, CameraPreview.class);
+        startActivity(intent);
+    }
+
+    private void tMT(){
+        Intent intent = new Intent(this, TMT.class);
+        startActivity(intent);
+    }
+
+    private void tMT2(){
+        Intent intent = new Intent(this, TMT2.class);
         startActivity(intent);
     }
 
