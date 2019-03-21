@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="410dp"
+    android:layout_height="650dp"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:id="@+id/collectedTV"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content" />
+
+    <Button
+        android:id="@+id/changePlace"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:background="@drawable/oval_button"
+        android:contentDescription="It's a button, ha za"
+        android:text="0" />
+
+</LinearLayout>
