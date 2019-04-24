@@ -2,6 +2,7 @@ package com.heartrate.heartratemonitor;
 
 import android.app.Activity;
 import android.content.Context;
+import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.hardware.Camera;
@@ -58,8 +59,8 @@ public class CameraPreview extends Activity {
     private Context context;
     private int addX = -1;
     double addY;
-    int[] xv = new int[300000];
-    int[] yv = new int[300000];
+    int[] xv = new int[1000];
+    int[] yv = new int[1000];
     int[] hua=new int[]{9,10,11,12,13,14,13,12,11,10,9,8,7,6,7,8,9,10,11,10,10};
 
     private static final AtomicBoolean processing = new AtomicBoolean(false);
@@ -70,7 +71,8 @@ public class CameraPreview extends Activity {
     //Android Phone camera handle
     private static Camera camera = null;
     //private static View image = null;
-    private static TextView mTV_Heart_Rate = null;
+    public static TextView mTV_Heart_Rate = null;
+    public static TextView mTV_Heart_Rate20 = null;
     private static TextView mTV_Avg_Pixel_Values = null;
     private static TextView mTV_pulse = null;
     private static PowerManager.WakeLock wakeLock = null;
@@ -94,13 +96,14 @@ public class CameraPreview extends Activity {
     //Heartbeat subscript value
     private static int beatsIndex = 0;
     //Heartbeat array size
-    private static final int beatsArraySize = 10;
+    private static final int beatsArraySize = 1;
     //心跳数组
     private static final int[] beatsArray = new int[beatsArraySize];
     //心跳脉冲
     private static double beats = 0;
     //开始时间
     private static long startTime = 0;
+    private static double HR20 = 0;
 
 
 
@@ -138,7 +141,7 @@ public class CameraPreview extends Activity {
         renderer = buildRenderer(color, style, true);
 
         //设置好图表的样式
-        setChartSettings(renderer, "X", "Y", 0, 3000, 0,32, Color.WHITE, Color.WHITE);
+        setChartSettings(renderer, "X", "Y", 0, 1000, 4,16, Color.WHITE, Color.WHITE);
 
         //生成图表
         chart = ChartFactory.getLineChartView(context, mDataset, renderer);
@@ -175,6 +178,7 @@ public class CameraPreview extends Activity {
         mTV_Heart_Rate = (TextView) findViewById(R.id.id_tv_heart_rate);
         mTV_Avg_Pixel_Values = (TextView) findViewById(R.id.id_tv_Avg_Pixel_Values);
         mTV_pulse = (TextView) findViewById(R.id.id_tv_pulse);
+        mTV_Heart_Rate20 = (TextView) findViewById(R.id.id_tv_heart_rate20);
 
         PowerManager pm = (PowerManager) getSystemService(Context.POWER_SERVICE);
         wakeLock = pm.newWakeLock(PowerManager.FULL_WAKE_LOCK,  "My Tag");
@@ -186,6 +190,11 @@ public class CameraPreview extends Activity {
         //当结束程序时关掉Timer
         timer.cancel();
         super.onDestroy();
+    }
+
+    @Override
+    public void onStop(){
+        super.onStop();
     }
 
     /**
@@ -272,15 +281,15 @@ public class CameraPreview extends Activity {
         int length = series.getItemCount();
         int bz = 0;
         //addX = length;
-        if (length > 3000) {
+        if (length > 1000) {
             //wakeLock.release();
-            //length = 3000;
-            //bz=1;
+            length = 1000;
+            bz=1;
         }
         addX = length;
         //Ambil nilai-nilai dari titik lama atur x dan y ke dalam cadangan, dan tambah nilai x dengan 1, menyebabkan kurva bergerak ke kanan.
         for (int i = 0; i < length; i++) {
-            xv[i] = (int) series.getX(i);// - bz;
+            xv[i] = (int) series.getX(i) - bz;
             yv[i] = (int) series.getY(i);
         }
 
@@ -310,7 +319,7 @@ public class CameraPreview extends Activity {
     @Override
     public void onResume() {
         super.onResume();
-//        wakeLock.acquire();
+        //wakeLock.acquire();
         camera = Camera.open();
         startTime = System.currentTimeMillis();
     }
@@ -324,7 +333,6 @@ public class CameraPreview extends Activity {
         camera.release();
         camera = null;
     }
-
 
     /**
      * 相机预览方法
@@ -392,7 +400,10 @@ public class CameraPreview extends Activity {
             //Dapatkan waktu akhir sistem (ms)
             long endTime = System.currentTimeMillis();
             double totalTimeInSecs = (endTime - startTime) / 1000d;
-            if (totalTimeInSecs >= 2) {
+            if(totalTimeInSecs >=1){
+                mTV_Heart_Rate.setText("Timers "+String.valueOf(totalTimeInSecs));
+            }
+            if (totalTimeInSecs >= 20) {
                 double bps = (beats / totalTimeInSecs);
                 int dpm = (int) (bps * 60d);
                 if (dpm < 30 || dpm > 180|| imgAvg < 200) {
@@ -419,11 +430,13 @@ public class CameraPreview extends Activity {
                     }
                 }
                 int beatsAvg = (beatsArrayAvg / beatsArrayCnt);
-                mTV_Heart_Rate.setText("Heart Rate"+String.valueOf(beatsAvg) +
+                /*mTV_Heart_Rate.setText("Heart Rate"+String.valueOf(beatsAvg) +
                         "  value:" + String.valueOf(beatsArray.length) +
                         "    " + String.valueOf(beatsIndex) +
                         "    " + String.valueOf(beatsArrayAvg) +
-                        "    " + String.valueOf(beatsArrayCnt));
+                        "    " + String.valueOf(beatsArrayCnt));*/
+                if(beatsIndex == beatsArray.length){ HR20 = beatsAvg;}
+                mTV_Heart_Rate20.setText("Heart Rate every 20 seconds "+String.valueOf(HR20));
                 //获取系统时间（ms）
                 startTime = System.currentTimeMillis();
                 beats = 0;
@@ -431,6 +444,8 @@ public class CameraPreview extends Activity {
             processing.set(false);
         }
     };
+
+
 
     /**
      * 预览回调接口
